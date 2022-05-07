@@ -13,7 +13,7 @@ app.use(express.json());
 app.get('/users', async (req, res) => {
   const users = await req.app.locals.db.collection('users').find().toArray();
   res.json(users);
-})
+});
 
 app.post('/users', async (req, res) => {
   const result = await req.app.locals.db.collection('users').insertOne(req.body);
@@ -22,12 +22,16 @@ app.post('/users', async (req, res) => {
   } else {
       res.status(500).send("Something went wrong");
   }
-})
+});
+
+app.get('*',function (req, res) {
+    res.status(404).send('Page not found 🦗');
+});
 
 app.use(function(err, req, res, next) {
     console.error(err.stack);
     res.status(500).send('Something broke!');
-  });
+});
   
 
 mongoClient.connect(function(err, client) {
